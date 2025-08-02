@@ -6,6 +6,6 @@ def file_to_list_of_lines(filename):
     else: 
         with open(filename) as f:
             return f.read().splitlines()
-        
+
 def testAvailable():
     print("Reading module available")
