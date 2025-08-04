@@ -1,4 +1,4 @@
-import solutions.day2 as two
+import solutions.day3 as three
 
 
-two.solve()
+three.solve()

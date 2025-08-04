@@ -7,5 +7,11 @@ def file_to_list_of_lines(filename):
         with open(filename) as f:
             return f.read().splitlines()
 
+def file_to_numbers(filename):
+    lines = file_to_list_of_lines(filename)
+    result = [int(a) for a in lines]
+    return result
+
 def testAvailable():
     print("Reading module available")
+
