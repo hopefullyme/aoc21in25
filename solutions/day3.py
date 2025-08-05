@@ -1,7 +1,7 @@
 from utils.reading import file_to_list_of_lines
 def solve():
-    # input = file_to_list_of_lines('inputs/3.txt')
-    input = file_to_list_of_lines('inputs/test3.txt')
+    input = file_to_list_of_lines('inputs/3.txt')
+    # input = file_to_list_of_lines('inputs/test3.txt')
 
     bitsInPos = [[bitstr[i] for bitstr in input] for i in range(len(input[0]))]
     # print(bitsInPos)
@@ -11,7 +11,16 @@ def solve():
 
     # oxygen generator rating
     ogr = getOxyRate(input)
-    print(int(ogr, 2))
+    ogrd = int(ogr, 2)
+    print(ogrd)
+    csr = getCO2rate(input)
+    # print(csr)
+    csrd = int(csr, 2)
+    print(csrd)
+
+    print(ogrd * csrd)
+
+
 
 def getGamma(bitLists):
     # most common bit from each position
@@ -48,8 +57,30 @@ def getOxyRate(input):
         for num in numList:
             if hasBitInPos(num, mcBit, pos):
                 nextList.append(num)
+        
+        if len(nextList) == 1:
+            return nextList[0]        
         numList = nextList
-    return numList[0]    
+    return numList[0]
+
+def getCO2rate(input):
+    numList = input.copy()
+    # for each pos:
+    for pos in range(len(numList[0])):
+        nextList = []
+        #  find the least common bit (if counts are even, use 0)
+        mcBit = getLeastCommonBit(pos, numList)
+        #  keep only the ones with that bit in that pos
+        for num in numList:
+            if hasBitInPos(num, mcBit, pos):
+                nextList.append(num)
+        
+        # print(nextList) 
+        if len(nextList) == 1:
+            return nextList[0]
+        numList = nextList
+    return numList[0]
+
 
 def hasBitInPos(str, bit, pos):
     return str[pos] == bit
@@ -63,6 +94,19 @@ def getMostCommonBit(pos, numList):
         else:
             zeroes += 1
     if ones >= zeroes:
+        return '1'
+    else:
+        return '0'
+
+def getLeastCommonBit(pos, numList):
+    zeroes = 0
+    ones = 0
+    for num in numList:
+        if num[pos] == '1':
+            ones += 1
+        else:
+            zeroes += 1
+    if ones < zeroes:
         return '1'
     else:
         return '0'
