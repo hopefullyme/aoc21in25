@@ -5,23 +5,21 @@ def solve():
 
     bitsInPos = [[bitstr[i] for bitstr in input] for i in range(len(input[0]))]
     # print(bitsInPos)
-    gamma = getGamma(bitsInPos)
-    print(gamma)
+    # gamma = getGamma(bitsInPos)
+    # print(gamma)
     # epsilon = getEpsilon(bitsInPos)
 
     # oxygen generator rating
-    ogr = getOxyRate(input, gamma)
+    ogr = getOxyRate(input)
+    print(int(ogr, 2))
 
 def getGamma(bitLists):
     # most common bit from each position
     gamma = ''
     for bitlist in bitLists:
         counts = countBits(bitlist)
-        print(counts)
         if counts[0] > counts[1]:
             gamma += '0'
-        elif counts[0] == counts[1]:
-            gamma += '-'
         else:
             gamma += '1'
     return gamma
@@ -39,26 +37,37 @@ def getEpsilon(bitLists):
             ep += '1'
     return ep
 
-def getOxyRate(nums, gamma):
-    numList = nums.copy()
-    # gamma has the most common bit for each bit positoin
-    for pos, bit in enumerate(gamma):
-        if bit == '-':
-            bit = '1'
+def getOxyRate(input):
+    numList = input.copy()
+    # for each pos:
+    for pos in range(len(numList[0])):
         nextList = []
+        #  find the most common bit (if counts are even, use 1)
+        mcBit = getMostCommonBit(pos, numList)
+        #  keep only the ones with that bit in that pos
         for num in numList:
-            if hasBitInPos(num, bit, pos):
+            if hasBitInPos(num, mcBit, pos):
                 nextList.append(num)
         numList = nextList
-        print(numList)
-    
-        
-    
+    return numList[0]    
 
 def hasBitInPos(str, bit, pos):
     return str[pos] == bit
 
-def countBits(bitList):
-    zeroes = bitList.count('0')
-    ones = bitList.count('1')
+def getMostCommonBit(pos, numList):
+    zeroes = 0
+    ones = 0
+    for num in numList:
+        if num[pos] == '1':
+            ones += 1
+        else:
+            zeroes += 1
+    if ones >= zeroes:
+        return '1'
+    else:
+        return '0'
+    
+def countBits(bitStr):
+    zeroes = bitStr.count('0')
+    ones = bitStr.count('1')
     return (zeroes, ones)
