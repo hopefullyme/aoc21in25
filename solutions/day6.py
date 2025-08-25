@@ -6,14 +6,22 @@ from time import perf_counter
 def solve():
     lanternfish = read_csv("inputs/6.txt")
     print(lanternfish)
-    for i in range(80):
-        lf_next = []
-        for f in lanternfish:
-            if f == 0:
-                lf_next.extend([6, 8])
+    lf_counts = count_fish(lanternfish)
+    print(lf_counts)
+    for _ in range(256):
+        lf_next = [0] * 9
+        for age, fishes in enumerate(lf_counts):
+            if age == 0:
+                lf_next[6] += fishes
+                lf_next[8] += fishes
             else:
-                lf_next.append(f - 1)
-        print(f"day {i} - {len(lf_next)} fish")
-        lanternfish = lf_next
+                lf_next[age - 1] += fishes
+        lf_counts = lf_next
             
-    print(len(lanternfish))
+    print(sum(lf_counts))
+
+def count_fish(fishes):
+    result = [0] * 9
+    for f in fishes:
+        result[f] += 1
+    return result
