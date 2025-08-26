@@ -1,3 +1,3 @@
-import solutions.day6 as day
+import solutions.day7 as day
 
 day.solve()
