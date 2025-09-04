@@ -1,13 +1,29 @@
 from utils.reading import file_to_list_of_lines
 
+SEVEN_SEGMENT = {
+    'ABCEFG': '0',
+    'CF': '1',
+    'ACDEG': '2',
+    'ACDFG': '3',
+    'BCDF': '4',
+    'ABDFG': '5',
+    'ABDEFG': '6',
+    'ACF': '7',
+    'ABCDEFG': '8',
+    'ABCDFG': '9'
+}
+
 def solve():
-    input = file_to_list_of_lines('inputs/test8.txt')
+    input = file_to_list_of_lines('inputs/8.txt')
     entries = tokenize(input)
     sig_sorted_entries = map(sort_signals, entries)
+    total = 0
     for entry in sig_sorted_entries:
         legend = analyze(entry)
-        print(legend)
-        
+        output_value = decode(entry, legend)
+        total += output_value
+    
+    print(total)
 
 def tokenize(lines):
     return map(lambda l: l.split(), lines)
@@ -77,3 +93,18 @@ def analyze(line):
                 legend[wire] = 'G'
 
     return legend
+
+
+def decode(line, legend):
+    outputs = output_values(line)
+    correct_displays = []
+    for digit in outputs:
+        segments = [legend[wire] for wire in digit]
+        cd = ''.join(sorted(segments))
+        correct_displays.append(cd)
+
+    actual_digits = [SEVEN_SEGMENT[combo] for combo in correct_displays]
+
+    value = int(''.join(actual_digits))
+
+    return value
